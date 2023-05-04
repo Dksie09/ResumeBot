@@ -1,4 +1,86 @@
+# import random
+# import json
+# import pickle
+# import numpy as np
+# import nltk
+# import tensorflow
+# import keras
+# from nltk.stem import WordNetLemmatizer
+# from keras.models import load_model
+# from datetime import datetime
+# from reportlab.pdfgen import canvas
+# from typing import List
 
+# lemmatizer = WordNetLemmatizer()
+# intents = json.loads(open('intents.json').read())
+
+# words = pickle.load(open('words.pk1','rb'))
+# classes = pickle.load(open('classes.pk1','rb'))
+# model = load_model('chatbotmodel.h5')
+
+# def clean_up_sentence(sentence):
+#     sentence_words = nltk.word_tokenize(sentence)
+#     sentence_words = [lemmatizer.lemmatize(word) for word in sentence_words]
+#     return sentence_words
+
+# def bag_of_words(sentence):
+#     sentence_words = clean_up_sentence(sentence)
+#     bag = [0] * len(words)
+#     for w in sentence_words:
+#         for i, word in enumerate(words):
+#             if word == w:
+#                 bag[i]=1
+#     return np.array(bag)
+
+# def predict_class(sentence):
+#     bow = bag_of_words(sentence)
+#     res = model.predict(np.array([bow]))[0]
+#     ERROR_THRESHOLD = 0.25
+#     results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
+
+#     results.sort(key=lambda x: x[1], reverse=True)
+#     return_list = []
+#     for r in results:
+#         return_list.append({'intent': classes[r[0]], 'probability': str(r[1])})
+#     return return_list
+
+# def get_response(intents_list, intents_json):
+#     tag = intents_list[0]['intent']
+#     list_of_intents = intents_json['intents']
+#     for i in list_of_intents:
+#         if i['tag'] == tag:
+#             result = random.choice(i['responses'])
+#             break
+#     return result
+
+# print("Go! Bot is running")
+
+# # Create empty chat history list
+# chat_history = []
+
+# while True:
+#     message = input("")
+#     chat_history.append(('User', message))
+#     ints = predict_class(message)
+#     res = get_response(ints, intents)
+#     if message.lower() == 'exit':
+#         # Create PDF of user responses
+#         pdf_filename = 'user_responses_{}.pdf'.format(datetime.now().strftime("%Y%m%d_%H%M%S"))
+#         pdf_canvas = canvas.Canvas(pdf_filename)
+#         y = 750
+#         for chat in chat_history:
+#             if chat[0] == 'User':
+#                 pdf_canvas.drawString(50, y,  chat[1])
+#                 y -= 25
+#         pdf_canvas.save()
+
+#         print('User responses saved to {}'.format(pdf_filename))
+#         break
+
+#     chat_history.append(('Bot', res))
+#     print(res)
+
+# # chatbot.py
 
 import random
 import json
@@ -14,8 +96,6 @@ from reportlab.pdfgen import canvas
 from typing import List
 from datetime import datetime
 from reportlab.pdfgen import canvas
-import streamlit as st
-from streamlit_chat import message as st_message
 
 def make_Resume(history):
     chat_history = history
@@ -102,9 +182,9 @@ def make_Resume(history):
         pdf_canvas.setFont("Helvetica-Bold", 20)
         pdf_canvas.drawString(50, y, "{}".format(name.capitalize()))
         y -= 25
-        pdf_canvas.setFillColorRGB(233, 30, 99)
-        pdf_canvas.setFont("Helvetica", 15)
-        pdf_canvas.drawString(50, y, "({})".format(post.strip()))
+        pdf_canvas.setFillColorRGB(255/255, 20/255, 147/255)
+        pdf_canvas.setFont("Helvetica", 12)
+        pdf_canvas.drawString(50, y,"({})".format(post.strip()))
         y -= 35
         pdf_canvas.setFillColorRGB(59/255, 89/255, 152/255)
         pdf_canvas.setFont("Helvetica", 12)
@@ -168,7 +248,7 @@ def make_Resume(history):
         y -= 25
         #end the PDF
         pdf_canvas.save()
-        message("PDF created successfully!", pdf_filename)
+        print("PDF created successfully!", pdf_filename)
 
 
     create_resume_pdf(name, link)
@@ -215,26 +295,33 @@ def get_response(intents_list, intents_json):
             break
     return result
 
-message("Go! Bot is running")
+print("Go! Bot is running")
 
 # Create empty chat history list
 chat_history = []
 
 while True:
-    message = st.text_input("Your message", key="input")
-    
+    message = input("")
     chat_history.append(('User', message))
-    message(message, is_user=True)
     ints = predict_class(message)
     res = get_response(ints, intents)
     if message.lower() == 'exit':
-        # print(chat_history,"eeeee")
+        print(chat_history,"eeeee")
         make_Resume(chat_history)
-       
+        # print(chat_history)
+        # Create PDF of user responses
+        # pdf_filename = 'user_responses_{}.pdf'.format(datetime.now().strftime("%Y%m%d_%H%M%S"))
+        # pdf_canvas = canvas.Canvas(pdf_filename)
+        # y = 750
+        # for chat in chat_history:
+            # if chat[0] == 'User':
+                # pdf_canvas.drawString(50, y,  chat[1])
+                # y -= 25
+        # pdf_canvas.save()
+
+        # print('User responses saved to {}'.format(pdf_filename))
         break
 
     chat_history.append(('Bot', res))
-    message(res)
-    
-    # print(res)
+    print(res)
 
