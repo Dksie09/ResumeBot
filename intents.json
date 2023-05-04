@@ -11,7 +11,7 @@
 
   {"tag": "myName",
   "patterns": ["my name is Devansh","my name is Dakshi","my name is Ganesh","my name is Sarthak"],
-  "responses": ["Could you give us your contact details?(email/ phone no.)", "Could you provide your contact details?(email/ phone no.)"]},
+  "responses": ["Could you give us your contact details?(email)", "Could you provide your contact details?(email/phone number)"]},
 
   {"tag": "myLink",
   "patterns": ["9910968123", "9910968123", "0192837465", "1234567890", "dakshiegoel@gmail.com", "user123@yahoo.com", "ganesh101@gmail.com"],
