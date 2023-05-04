@@ -1,0 +1,55 @@
+{"intents":  [
+
+  {"tag": "greetings",
+   "patterns": ["hello","hey","hi","good day","Greetings","whats up?","how is it going"],
+    "responses": ["Hello, How can I help you?","Hey! What can i do for you?"]
+  },
+
+  {"tag": "asksName",
+  "patterns": ["help me in", "build, resume", "can you","help me in my resume"],
+  "responses": ["Yes sure! What is your name","Why not, what's your name?"] },
+
+  {"tag": "myName",
+  "patterns": ["my name is Devansh","my name is Dakshi","my name is Ganesh","my name is Sarthak"],
+  "responses": ["Could you give us your contact details?(email/ phone no.)", "Could you provide your contact details?(email/ phone no.)"]},
+
+  {"tag": "myLink",
+  "patterns": ["9910968123", "9910968123", "0192837465", "1234567890", "dakshiegoel@gmail.com", "user123@yahoo.com", "ganesh101@gmail.com"],
+  "responses": ["Can you give us your github/ linkedin profile link so that companies can understand you better?","Are you an active github/ linkedin user? If so, kindly give your profile link"]},
+
+  
+  {"tag": "myContact",
+  "patterns": ["Here is my linkedin profile https://www.linkedin.com/in/dakshi-goel/","https://www.linkedin.com/in/dakshi-goel/","https://github.com/Dksie09","This is my github profile https://github.com/Dksie09", "My github profile is https://github.com/Dksie09", "Linkedin", "github"]  ,
+  "responses": ["Cool! What programming languages are you comfortable with?", "Great! Could you mention the programming languages that are you comfortable with?"]},
+
+
+  {"tag": "language",
+  "patterns": ["I can code in java", "i can code in c", "i can code in python", "i can code in python, java, javascript","i can code in rust, swift", "I can code in dart, flutter, kotlin"],
+  "responses": ["Impressive! What is your highest qualification?", "Great! What is your highest qualification?"]},
+
+  {"tag": "qualification",
+  "patterns": ["i' have done b.tech in computer science", "i have done m.tech in computer science", "i have done Bachelors in computer science", "i have done Bachelors in computer science", "I am a 2nd year btech student in computer science", "I am a 3rd year btech student in computer science", "I am 4th year mtech student in computer science", "I am a 2st year btech student in computer science"],
+  "responses": ["What position are you interested in working for?", "What position you want to apply for?"]},
+
+
+  {"tag": "applyPosition",
+  "patterns": ["engineer", "intern", "developer", "scientist", "I want to work as a Data science intern", "web developer", "app developer", "I want to work as a blockchain developer"],
+  "responses": ["Interesting🤔, I bet you have worked on some amazing projects. Could you give a brief description it?", "Interesting🤔, Could you give a brief description about any of the projects you have worked upon, in the past?"]},
+
+  {"tag": "project",
+  "patterns": ["I have worked on an app","I have worked on a website","I have created an app", "I have created a website", "I have created this model", "I have created this system"],
+  "responses": ["Appealing! Could you share your previous work experience with us?", "Appealing! Can you give a brief about your previous work experience?"]},
+
+   {"tag": "experience",
+  "patterns": ["I worked for a ","I was an intern","I worked part time for a company","I worked as a freelancer", "I have a start up", "I used to work at", "I used to be an intern at", "intern at", "worked at"],
+  "responses": ["Nice! Could you share your achievements with us", "Awesome! Could you mention your achievements"]},
+
+
+   {"tag": "achievements",
+  "patterns": ["I secured 1st position in hackthon","I was 2nd runner up in competition", "I won gold medal in fest", "I was 1st runner up in a college-level hackathon", "I was selected for national competition"],
+  "responses": ["Thank you for your time and patience. Do you want to add more?'", "Done!! Do you want to add anything else?"]},
+
+  {"tag": "end",
+  "patterns": ["thats all ","i want to end the questions","thats all from my side", "no"],
+  "responses": ["Thank you, your resume will be created shortly. type 'exit'"]}
+]}
