@@ -16,14 +16,11 @@ from datetime import datetime
 from reportlab.pdfgen import canvas
 
 def make_Resume(history):
-    chat_history = history
-    user_responses = []
-    for chat in chat_history:
-        if chat[0] == 'User':
-            user_responses.append(chat[1])
+    # st.write(history)
+    # pdf_filename = 'resume_{}.pdf'.format(datetime.now().strftime("%Y%m%d_%H%M%S"))
+    user_responses = history
     res_name = user_responses[2]
 
-    #lowercase & get words other that "my", "name", "is"
     res_name = res_name.lower().split()
 
     res_name = [word for word in res_name if word not in ['my', 'name', 'is']]
@@ -76,6 +73,8 @@ def make_Resume(history):
     res_achievements = res_achievements.split()
     res_achievements = [word for word in res_achievements if word not in ['i', 'have', "I"]]
     achievements = ' '.join(res_achievements)
+
+    # displayPDF(pdf_filename)
 
     def create_resume_pdf(name, link):
         pdf_filename = 'resume_{}.pdf'.format(datetime.now().strftime("%Y%m%d_%H%M%S"))
@@ -167,13 +166,15 @@ def make_Resume(history):
         #end the PDF
         pdf_canvas.save()
         print("PDF created successfully!", pdf_filename)
-
-
+        st.success("Resume created successfully!")
+        st.balloons()
+        displayPDF(pdf_filename)
     create_resume_pdf(name, link)
+    
 
 lemmatizer = WordNetLemmatizer()
 intents = json.loads(open('intents.json').read())
-
+chat_history = []
 words = pickle.load(open('words.pk1','rb'))
 classes = pickle.load(open('classes.pk1','rb'))
 model = load_model('chatbotmodel.h5')
@@ -213,33 +214,62 @@ def get_response(intents_list, intents_json):
             break
     return result
 
-print("Go! Bot is running")
+import base64
+def displayPDF(file):
+    with open(file, "rb") as f:
+        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+    pdf_display = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+    st.markdown(pdf_display, unsafe_allow_html=True)
 
-# Create empty chat history list
-chat_history = []
+import streamlit as st
+from streamlit_chat import message
+import requests
 
-while True:
-    message = input("")
-    chat_history.append(('User', message))
-    ints = predict_class(message)
+st.set_page_config(
+    page_title="Streamlit Chat - Demo",
+    page_icon=":robot:"
+)
+
+st.header("Coofee")
+st.write("Your resume bot")
+
+
+if 'generated' not in st.session_state:
+    st.session_state['generated'] = []
+
+if 'past' not in st.session_state:
+    st.session_state['past'] = []
+
+def query(user_input):
+    ints = predict_class(user_input)
     res = get_response(ints, intents)
-    if message.lower() == 'exit':
-        print(chat_history,"eeeee")
-        make_Resume(chat_history)
-        # print(chat_history)
-        # Create PDF of user responses
-        # pdf_filename = 'user_responses_{}.pdf'.format(datetime.now().strftime("%Y%m%d_%H%M%S"))
-        # pdf_canvas = canvas.Canvas(pdf_filename)
-        # y = 750
-        # for chat in chat_history:
-            # if chat[0] == 'User':
-                # pdf_canvas.drawString(50, y,  chat[1])
-                # y -= 25
-        # pdf_canvas.save()
+    return res
 
-        # print('User responses saved to {}'.format(pdf_filename))
-        break
+def get_text():
+    input_text = st.text_input("You", key="input")
+    chat_history.append(('User', input_text))
+    return input_text 
 
-    chat_history.append(('Bot', res))
-    print(res)
 
+
+while(True):
+    user_input = get_text()
+    
+    if user_input:
+        if user_input.lower() == 'exit':
+            # st.write(chat_history)
+            # st.write(st.session_state['past'])
+            make_Resume(st.session_state['past'])
+            
+            break
+        output = query(user_input)
+        # st.write(chat_history)
+        
+        st.session_state.past.append(user_input)
+        st.session_state.generated.append(output)
+        # st.write(st.session_state['past'])
+    if st.session_state['generated']:
+        
+        for i in range(len(st.session_state['generated'])-1, -1, -1):
+            message(st.session_state["generated"][i], key=str(i))
+            message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
